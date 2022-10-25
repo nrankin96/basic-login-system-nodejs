@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 
 app.get('/home', (req, res) => {
     if(req.session.loggedin) {
-        res.send('Welcome back ' + req.session.username + ' !');
+        res.redirect('dashboard');
     } else {
         res.send('Please login to view this page!');
     }
@@ -56,6 +56,13 @@ app.get('/home', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname + '/register.html'));
 });
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname + '/dashboard.html'));
+
+});
+
+
 
 app.post('/register', (req, res) => {
     let username = req.body.username;
