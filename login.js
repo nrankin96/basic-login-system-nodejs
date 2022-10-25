@@ -3,9 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
+const alert = require('alert');
 
-// create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: true}); 
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -15,12 +14,24 @@ const connection = mysql.createConnection({
 });
 
 
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+    connection.query('SELECT * FROM accounts', (err, result) => {
+        if (err) throw err;
+        // console.log(result);
+    })
+  });
+
+
 const app = express();
 app.use(session({
     secret: 'secret',
     resave: true,
     saveUninitialized: true
 }));
+// create application/x-www-form-urlencoded parser
+const urlencodedParser = bodyParser.urlencoded({ extended: true}); 
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -28,6 +39,10 @@ app.use('/static', express.static(__dirname + '/static'));
 // create application/json parser
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/login.html'));
+
+});
 
 app.get('/home', (req, res) => {
     if(req.session.loggedin) {
@@ -38,26 +53,38 @@ app.get('/home', (req, res) => {
     res.end();
 });
 
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + '/login.html'));
-
-});
-
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname + '/register.html'));
+});
+
+app.post('/register', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    let confirmPW = req.body.confirmPassword;
+    let email = req.body.email; 
+
+    if(confirmPW != password) {
+        alert('Passwords do not match!');
+    }else {
+        connection.query(`INSERT INTO accounts (username, password, email) VALUES ('${username}', '${password}', '${email}')`, (err, results) => {
+            if (err){
+                console.log(err);
+            }
+            console.log('New user inserted');
+        });
+        res.redirect('/');
+    };
+    
 });
 
 app.post('/auth', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    let email = req.body.email;
 
     if (username && password) {
         connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-            if(err) {
-                throw err
-            };
+            if (error) throw error;
+            
             if(results.length >0) {
                 req.session.loggedin = true;
                 req.session.username = username;
@@ -72,41 +99,6 @@ app.post('/auth', (req, res) => {
     res.end();
 }
 });
-
-app.post('/register', urlencodedParser, (req, res) => {
-   
-    const registerUser = () => {
-        let username = req.body.username;
-        let password = req.body.password;
-        let confirmPassword = req.body.confirmPassword;
-        let email = req.body.email;
-
-        if(username.length < 50) {
-            alert('Username must not exceede 50 characters.');
-        } else if(password.length < 255) {
-            alert('Password must not exceed 8 characters');
-            if(confirmPassword != password){
-                alert('Passwords do not match.');
-            }
-        } else {
-            connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-                if(err) throw err;
-                            // connection.query(`INSERT INTO accounts (username, password, email) VALUES(${username}, ${password}, ${email})`, function (err, result, fields) {
-                
-            });
-        }
-    } 
-
-
-
-
-
-    res.send('Successfuly registered');
-
-   
-});
-
-
 
 
 app.listen(3000, (req, res) => {
