@@ -60,3 +60,6 @@ body {
 #registerLink {
     color:#2868c7
 }
+
+.navbar-nav{float:right;margin:0}.navbar-nav>li{float:right}
+

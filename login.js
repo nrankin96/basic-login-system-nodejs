@@ -4,6 +4,7 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const alert = require('alert');
+const ejs = require('ejs');
 
 
 const connection = mysql.createConnection({
@@ -39,6 +40,8 @@ app.use('/static', express.static(__dirname + '/static'));
 // create application/json parser
 app.use(bodyParser.json());
 
+app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/login.html'));
 
@@ -58,7 +61,12 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname + '/dashboard.html'));
+    if(req.session.loggedin) {
+        res.render('dashboard', {Username: req.body.username, Email: req.body.email});
+    } else {
+        res.send('Please login to view this page!');
+    }
+    
 
 });
 

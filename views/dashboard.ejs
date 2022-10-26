@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="./static/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/6bb3b2f33b.js" crossorigin="anonymous"></script>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a href="#" class="navbar p-3">
+            Dashboard
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarSupportedContent">
+            <ul class="navbar-nav list-inline p-3">
+                <li class="nav-item active list-inline-item">
+                    <a class="nav-link p-2" href="./dashboard.html">
+                        <i class="fa-solid fa-house-user"> </i>
+                        Home</a>
+                </li>
+                <li class="nav-item list-inline-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-user"></i>
+                        Profile</a>
+                </li>
+                <li class="nav-item list-inline-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-screwdriver-wrench"></i> Admin</a>
+                </li>
+                <li class="nav-item list-inline-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    <div class="account">
+        <h4>Profile Page</h4>
+        <hr>
+        <div class="details">
+            <p>Your Account details are below.</p>
+            <p class="userInfo">Username: <%= username %> </p>
+            <p class="userInfo">Email: <%= email %> </p>
+            <p class="userInfo">Role: Admin</p>
+            <p class="userInfo">Registered:</p>
+        </div>
+    </div>
+    <script src="../login.js"></script>
+    
+
+</body>
+
+</html>
