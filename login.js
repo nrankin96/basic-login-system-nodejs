@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/home', (req, res) => {
+
     if(req.session.loggedin) {
         res.redirect('dashboard');
     } else {
@@ -62,7 +63,17 @@ app.get('/register', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     if(req.session.loggedin) {
-        res.render('dashboard', {Username: req.body.username, Email: req.body.email});
+        let username = req.session.username;
+        let email = connection.query('SELECT email FROM accounts WHERE username = ?', [username], (err, results) => {
+            if (err) throw err;
+           Object.keys(results).forEach((key) => {
+            let row = results[key];
+            email = row.email;
+            res.render('dashboard', 
+                 {Username: username, email: email});
+           });
+            
+        });   
     } else {
         res.send('Please login to view this page!');
     }
