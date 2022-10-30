@@ -77,8 +77,25 @@ app.get('/dashboard', (req, res) => {
     } else {
         res.send('Please login to view this page!');
     }
-    
+});
 
+app.get('/admin', (req, res) => {
+    
+    if(req.session.loggedin) {
+        let username = req.session.username;
+        let email = connection.query('SELECT email FROM accounts WHERE username = ?', [username], (err, results) => {
+            if (err) throw err;
+           Object.keys(results).forEach((key) => {
+            let row = results[key];
+            email = row.email;
+            res.render('admin', 
+                 {username: username, email: email});
+           });
+            
+        });   
+    } else {
+        res.send('Please login to view this page!');
+    }
 });
 
 
@@ -126,8 +143,34 @@ app.post('/auth', (req, res) => {
 }
 });
 
+app.post('/admin', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    let confirmPW = req.body.confirmPassword;
+    let dbUsername = connection.query(`SELECT username FROM accounts WHERE username ? '${username}'`, (err, results) => {
+        if(err) throw err
+    });
+
+    let dbPassword = connection.query(`SELECT password FROM accounts WHERE password ? '${password}'`, (err, results) => {
+        if(err) throw err
+    });
+
+    if (confirmPW != Newpassword) {
+        alert('Passwords do not match!');
+    } if(username != dbUsername) { 
+
+        username = connection.query(`UPDATE TABLE accounts SET username = '${dbUsername}' WHERE username = '${username}'`, (err, results) => {
+            if (err) throw err;
+        });
+    } if(password != dbPassword) {
+        password = connection.query(`UPDATE TABLE accounts SET password = '${dbPassword}' WHERE password = '${password}'`, (err, results) => {
+            if (err) throw err;
+        });
+        res.redirect('/dashboard');
+    }
+    
+});
 
 app.listen(3000, (req, res) => {
     console.log('Servers started on port 3000');
 });
-    

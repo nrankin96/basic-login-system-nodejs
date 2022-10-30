@@ -93,4 +93,40 @@ body {
     padding: 30px 20px;
 }
 
+.accountForm {
+    width:400px;
+    height: 500px;
+    background-color: #FFFFFF;
+}
+
+
+.formInput {
+    padding: 20px;
+    margin: 20px;
+    background-color: #FFFFFF;
+    height: 500px;
+    text-align: center;
+    
+}
+
+.accountHeader {
+    text-align: center;
+    margin: 20px;
+}
+
+.btn {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.formLabel {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+.labelTxt {
+    text-align: center;
+    font-weight: bold;
+}
+
 
